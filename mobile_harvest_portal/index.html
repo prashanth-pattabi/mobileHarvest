@@ -1,0 +1,300 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Mobile Harvest Portal</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+
+<script type="text/javascript" src="http://static.stackmob.com/js/json2-min.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/underscore-1.3.3-min.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/backbone-0.9.2-min.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/2.5.3-crypto-sha1-hmac.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.5.5-min.js"></script>
+
+<script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
+<link type="text/css" rel="stylesheet" href="bootstrap/css/bootstrap.css"></link>
+<link type="text/css" rel="stylesheet" href="assets/css/basestyle.css"></link>
+
+
+<script type="text/javascript">
+
+StackMob.init({
+    appName: "mobile_harvest",
+    clientSubdomain: "psaisravangmailcom",
+    publicKey: "999e9c7b-8c61-4fcd-971a-0698a85e2bce",
+    apiVersion: 0
+});
+
+</script>
+
+
+</head>
+<body>
+
+<script>
+// Check for the various File API support.
+if (window.File && window.FileReader && window.FileList && window.Blob) {
+  // Great success! All the File APIs are supported.
+  //alert('Great. This browser supports the File API');
+} else {
+  alert('The File APIs are not fully supported in this browser.');
+}
+</script>
+  
+  <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="./index.html">Mobile Harvest Solutions</a>
+          <div class="nav-collapse collapse pull-right">
+            <ul class="nav">
+              <li class="active">
+                <a href="./index.html">HOME</a>
+              </li>
+              <li class="">
+                <a href="">MY ACCOUNT</a>
+              </li>
+              <li class="">
+                <a href="">SETTINGS</a>
+              </li>
+              <li class="">
+                <a href="">LOGOUT</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  <header class="jumbotron">
+    <div class="container">
+      <h1> Manage Podcasts</h1>
+      <p> Add, Edit or Delete podcasts that have been shared within the community</p>
+    </div>
+  </header>
+
+  <div id="mainContentWrapper" class="container">
+    <div id="leftBox" class="span7">
+      <ul class="nav nav-tabs">
+          <li class="active">
+            <a href="#tab1" data-toggle="tab">My Podcast</a>
+          </li>
+          <li class="">
+            <a href="#tab2" data-toggle="tab">Other Podcast</a>
+          </li>
+        </ul>
+        
+      <script>
+      //Define the Media Class
+  		var Media = StackMob.Model.extend({
+  			schemaName: 'media'
+  		});            
+  		
+  		//Define the Media Collection
+  		var MediaCollection = StackMob.Collection.extend({
+  			model: Media
+  		});
+  		
+  		var mediaCollection = new MediaCollection();   
+  		
+  	 //Define the Media Class
+  		var Topic = StackMob.Model.extend({
+  			schemaName: 'topic'
+  		});            
+  		
+  		//Define the Media Collection
+  		var TopicCollection = StackMob.Collection.extend({
+  			model: Topic
+  		});
+  	 
+  		var topicCollection = new TopicCollection();
+  		
+  		
+      </script>  
+           
+        <div class="tab-content">
+          <div class="tab-pane active" id="tab1">
+          <div id="mediaByOrgWrapper"></div>
+          <script>
+           var query_media_by_org = new StackMob.Collection.Query();
+           query_media_by_org.equals('username', 'UNWomen').setRange(0,9).orderDesc('createddate');
+           mediaCollection.query(query_media_by_org,{
+  				  success: function(parsedCollection){
+  					  var parsedCollection = parsedCollection.toJSON();
+  					  $("#mediaByOrgWrapper").append('<table class="table table-striped">');
+  					  for(var i=0; i<parsedCollection.length; i++){
+          	$("#mediaByOrgWrapper table").append('<tr class="mediaFileRow" media_link='+parsedCollection[i].audio+'>');
+          	$("#mediaByOrgWrapper table tr:last").append('<td>'+parsedCollection[i].media_id+'</td>');
+          	$("#mediaByOrgWrapper table tr:last").append('<td>'+parsedCollection[i].username+'</td>');
+          }
+  					  $("#mediaByOrgWrapper").append('</table>');
+  						$("#mediaByOrgWrapper").append("<script type='text/javascript' src='http://mediaplayer.yahoo.com/js'>");
+  				  },
+  				  failure:function(){
+  					  alert("Query didn't execute properly");
+  				  }
+  			  }); //fetch the first 10 entries
+	
+           </script>
+          </div>
+          
+          <!-- CONTENT FOR OTHER MEDIA SECTION -->
+          <div class="tab-pane" id="tab2">
+           <div id="podcastsWrapper"></div>
+           <div class="tab2_nav" display:none>
+             <div id="prev" style="background-color: #000; color:#fff; display: inline-block; float: left">Prev</div>
+             <div id="next" style="background-color: #000; color:#fff; display: inline-block; float: left; margin-left:20px">Next</div>
+           </div>
+            <script>
+							 var q = new StackMob.Collection.Query();
+							  q.setRange(0,9).orderDesc('createddate');
+							  mediaCollection.query(q,{
+								  success: function(parsedCollection){
+									  var parsedCollection = parsedCollection.toJSON();
+									  $("#podcastsWrapper").append('<table class="table table-striped">');
+									  for(var i=0; i<parsedCollection.length; i++){
+		                	$("#podcastsWrapper table").append('<tr class="mediaFileRow" media_link='+parsedCollection[i].audio+'>');
+		                	$("#podcastsWrapper table tr:last").append('<td>'+parsedCollection[i].media_id+'</td>');
+		                	$("#podcastsWrapper table tr:last").append('<td>'+parsedCollection[i].username+'</td>');
+		                	$("#podcastsWrapper table tr:last").append('<td>'+'<a href='+parsedCollection[i].audio+' target="_blank">Open</a>'+'</td>');
+		                }
+									  $("#podcastsWrapper").append('</table>');
+								  },
+								  failure:function(){
+									  alert("Query didn't execute properly");
+								  }
+							  }); //fetch the first 10 entries
+					
+            </script>
+          </div>
+          
+          
+        </div>
+      </div>
+    
+    
+    <div id="rightBox" class="span4">
+      <ul class="nav nav-tabs">
+        <li class="active">
+          <a href="#tab3" data-toggle="tab">New Podcast</a>
+        </li>
+      </ul>
+      
+      <div id="actions" class="tab-content">
+        <div class="tab-pane active" id="tab3">
+          <ul>
+            <li>
+              <img src="assets/img/mic_grey.png" class="hoverable trigger_audioUploaderForm" mainimage="assets/img/mic_grey.png" altimage="assets/img/mic_green.png">
+            </li>
+            <li>
+              <img src="assets/img/camera_grey.png" class="hoverable trigger_videoUploaderForm" mainimage="assets/img/camera_grey.png" altimage="assets/img/camera_green.png">
+            </li>
+            <li>
+              <img src="assets/img/pic_grey.png" class="hoverable trigger_picUploaderForm" mainimage="assets/img/pic_grey.png" altimage="assets/img/pic_green.png">
+            </li>
+          </ul>
+          
+          <div id="uploaderFormWrapper">
+            <div id="audioUploaderForm" class="uploaderForms" style="display:none">
+              <form style="width: 100%">
+                
+                <label for="mediaFile">Media</label>
+                <input type="file" id="mediaFile" name="mediaFile">
+                
+                <label for="topic_tag">Topic Tags</label>
+                <select id="topic_tag">
+                  <script type="text/javascript">
+                    topicCollection.fetch({
+                    	success: function(topics){
+                    		topics = topics.toJSON();
+                    		//alert(JSON.stringify(topics));
+                    		for(var i=0; i<topics.length; i++){
+                    		 $("#topic_tag:last").append('<option value='+topics[i].topic_id.toString()+'>'+topics[i].topic_description+'</option>');
+                    		}
+                    	}
+                    });
+                  </script>
+                
+                </select>
+                
+                <br/>
+                <input type="button" class="btn btn-primary" id="submit_audioUploaderForm" value="Upload">
+              </form>
+              
+            </div>
+            
+            <script type="text/javascript" src="assets/js/formUploaderScript.js"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <script>
+      
+      function set_to_mainimage(){
+    	  $(".hoverable").each(function(){
+    		  var mainimage = $(this).attr('mainimage');
+        	$(this).attr('src', mainimage);
+    		 });
+      }
+      
+      function set_to_altimage(thisObject){
+    	  var altimage = thisObject.attr('altimage');
+    	  thisObject.attr('src', altimage);
+      }
+    	  
+      
+      $(".trigger_audioUploaderForm").click(function(e){
+    	  e.preventDefault();
+    	  set_to_mainimage();
+    	  set_to_altimage($(this));
+    	  $(".uploaderForms").hide();
+    	  $("#audioUploaderForm").slideDown();
+      });
+      
+
+      $(".trigger_videoUploaderForm").click(function(e){
+    	  e.preventDefault();
+    	  set_to_mainimage();
+    	  $(this).unbind('mouseleave');
+    	  var altimage = $(this).attr('altimage');
+    	  $(this).attr('src', altimage);
+    	  $(".uploaderForms").hide();
+    	  $("#videoUploaderForm").slideDown();
+      });
+      
+
+      $(".trigger_picUploaderForm").click(function(e){
+    	  e.preventDefault();
+    	  set_to_mainimage();
+    	  $(this).unbind('mouseleave');
+    	  var altimage = $(this).attr('altimage');
+    	  $(this).attr('src', altimage);
+    	  $(".uploaderForms").hide();
+    	  $("#picUploaderForm").slideDown();
+      });
+      
+
+
+      
+    </script>
+    
+    
+    
+  </div>
+  
+  
+  <footer class="footer">
+    <div class="container">
+      <p class="pull-right"><a href="#">Back to top</a></p>
+      <p>A Mobile Harvest Solutions initiative. All rights reserved.</p>
+    </div>
+  </footer>
+  
+</body>
+</html>

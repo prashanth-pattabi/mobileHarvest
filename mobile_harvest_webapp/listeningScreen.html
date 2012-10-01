@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>3 column listing</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+
+<script type="text/javascript" src="http://static.stackmob.com/js/json2-min.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/underscore-1.3.3-min.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/backbone-0.9.2-min.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/2.5.3-crypto-sha1-hmac.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.5.5-min.js"></script>
+
+
+<link type="text/css" rel="stylesheet" href="assets/css/basestyle.css"></link>
+
+
+<script type="text/javascript">
+
+StackMob.init({
+    appName: "mobile_harvest",
+    clientSubdomain: "psaisravangmailcom",
+    publicKey: "98037dd3-3517-45cf-8cd0-095b63015c0c",
+    apiVersion: 0
+});
+
+</script>
+
+
+</head>
+<body>
+
+<script>
+
+var username_list = [
+                     '9491682073',
+                     '9441591697',
+                     '9989321447',
+                     '9494828211', 
+                     '9848790248', 
+                     '9030702764', 
+                     '9491847755',
+                     '9246851263',
+                     '9440189162',
+                     '8500033471',
+                     '7702622340',
+                     '9989506704',
+                     '8008922842',
+                     '9441906776',
+                     '9550702488',
+                     '9959235841',
+                     '9573954535',
+                     '9963657188',
+                     '8374257312',
+                     '9603571194',
+                     '9000917592',
+                     '8019430593',
+                     '9866123315',
+                     '8143403029'
+                     ];
+
+
+
+//Define the Users Class
+var Users = StackMob.Model.extend({
+  schemaName: 'user'
+});            
+
+//Define the Media Collection
+var UsersCollection = StackMob.Collection.extend({
+  model: Users
+});
+
+var usersCollection = new UsersCollection();   
+
+var query_user_by_username = new StackMob.Collection.Query();
+query_user_by_username.select('username').select('profile_picture').mustBeOneOf('username', username_list);
+
+usersCollection.query(query_user_by_username,{
+	success: function(model){
+		model = model.toJSON();
+		//$("#output_box").html(JSON.stringify(model));
+		populateFriendsColumn(model);
+	},
+	error:function(){
+		alert("Failed to fetch data");
+	}
+});
+
+</script>  
+
+<div id="content_wrapper">
+  <div id="friends_column" style="width:32%; height: 100%; display: inline-block; overflow-x:hidden; overflow-y:scroll; text-align: center; margin: 0 auto; ">
+  </div>
+  
+  <div id="topics_column" style="width:32%; height: 100%; display: inline-block; vertical-align:top">
+    <div class="topic" topic=""><img class="topic_pic" src="http://s3-ap-southeast-1.amazonaws.com/mobileharvest/topic/7a84b8fcfd8d4909a1976e9eee077f19/topic_url/4_4.png"></div>
+    <div class="topic" topic=""><img class="topic_pic" src="http://s3-ap-southeast-1.amazonaws.com/mobileharvest/topic/600df7913aac4b3c93cfcf460417de03/topic_url/3_3.png"></div>
+    <div class="topic" topic=""><img class="topic_pic" src="http://s3-ap-southeast-1.amazonaws.com/mobileharvest/topic/5561ac1ec2c044a28e4f58421bf1e16d/topic_url/2_2.png"></div>
+    <div class="topic" topic=""><img class="topic_pic" src="http://s3-ap-southeast-1.amazonaws.com/mobileharvest/topic/2644b00a418b44ff944eb117f3768eba/topic_url/1_1.png"></div>
+  </div>
+  
+  <div id="organisations_column" style="width:32%; height: 100%; display: inline-block; vertical-align: top;">
+    <div class="org" org="UNWomen"><img class="org_pic" src="http://s3-ap-southeast-1.amazonaws.com/mobileharvest/promoted_contacts/UNWomen/prm_contacts_profilepic/un5.png"></div>
+    <div class="org" org="MobileHarvestCustomerSupport"><img class="org_pic" src="http://s3-ap-southeast-1.amazonaws.com/mobileharvest/promoted_contacts/MobileHarvestCustomerSupport/prm_contacts_profilepic/cc1copy1.png"></div>
+  </div>
+</div>  
+
+<div id="output_box"></div>
+  
+<script>
+ function populateFriendsColumn(list){
+	 for(var i=0; i<list.length; i++){
+		 $("#friends_column:last").append('<div class="user" username="'+list[i].username+'">'+'<img class="user_pic" src='+list[i].profile_picture+' />'+'</div>');
+	 }
+	 $(".user").click(function(e){
+			e.preventDefault();
+			link = "userMedia.html?"+"type="+$(this).attr('class')+"&username="+$(this).attr('username');
+			//alert(link);
+			window.location=link;
+		}); 
+ }
+</script>  
+
+<script>
+
+</script>
+  
+</body>
+</html>

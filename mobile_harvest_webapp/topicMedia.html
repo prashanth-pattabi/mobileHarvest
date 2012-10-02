@@ -103,16 +103,19 @@ function fetchTopicMedia(topic){
 			var media_ids_list = new Array();
 			for(var i=0; i<parsedCollection.length; i++){
 				media_ids_list.push(parsedCollection[i].media_id);
-				getMediaFiles(media_ids_list);
+				getMediaFiles(media_ids_list); //FUNCTION CALL TO getMediaFiles() - array of media ids of media files for which the topic in question is tagged, is passed as an argument 
 			}
-			//$("#output_box").html(JSON.stringify(media_ids_list));
+			
+			/** -------------------------------------------------------
+			* Function to retrieve Media files based on media id list
+			-----------------------------------------------------------**/
 			
 			function getMediaFiles(media_ids_list){
 				//alert(JSON.stringify(media_ids_list));
 				query_media_by_media_id.mustBeOneOf('media_id',media_ids_list).setRange(0,5).orderDesc('createddate');
 				mediaCollection.query(query_media_by_media_id,{
 				 success: function(parsedCollection){
-					$("#output_box").html(JSON.stringify(parsedCollection));
+					//$("#output_box").html(JSON.stringify(parsedCollection));
 				  var parsedCollection = parsedCollection.toJSON();
 				  for(var i=0; i<parsedCollection.length; i++){
 					  $("#media_collection_of_topic:last").append('<a href='+parsedCollection[i].audio+' target="_blank">');
@@ -121,6 +124,8 @@ function fetchTopicMedia(topic){
 				 }
 				});
 			}
+			
+			
 		}
 	});
  }
@@ -128,7 +133,7 @@ function fetchTopicMedia(topic){
 
 
 <div id="content_wrapper">
- <div style="width: 100%; height: 80px; background-color: #ccc; padding: 10px 0px;">
+ <div style="width: 100%; height: 80px; background-color: ; padding: 10px 0px;">
    <div class="topic"><img class="topic_pic" src=""><script>fetchProfilePic(topic)</script></div>
  </div>
  

@@ -125,8 +125,8 @@ usersCollection.query(query_user_by_username,{
  $(".org").click(function(e){
 		e.preventDefault();
 		link = "orgMedia.html?"+"type="+$(this).attr('class')+"&org="+$(this).attr('org');
-		alert(link);
-		//window.location=link;
+		//alert(link);
+		window.location=link;
 	}); 
  
  $(".topic").click(function(e){

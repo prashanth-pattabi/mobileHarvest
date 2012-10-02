@@ -95,10 +95,10 @@ usersCollection.query(query_user_by_username,{
   </div>
   
   <div id="topics_column" style="width:32%; height: 100%; display: inline-block; vertical-align:top">
-    <div class="topic" topic=""><img class="topic_pic" src="http://s3-ap-southeast-1.amazonaws.com/mobileharvest/topic/7a84b8fcfd8d4909a1976e9eee077f19/topic_url/4_4.png"></div>
-    <div class="topic" topic=""><img class="topic_pic" src="http://s3-ap-southeast-1.amazonaws.com/mobileharvest/topic/600df7913aac4b3c93cfcf460417de03/topic_url/3_3.png"></div>
-    <div class="topic" topic=""><img class="topic_pic" src="http://s3-ap-southeast-1.amazonaws.com/mobileharvest/topic/5561ac1ec2c044a28e4f58421bf1e16d/topic_url/2_2.png"></div>
-    <div class="topic" topic=""><img class="topic_pic" src="http://s3-ap-southeast-1.amazonaws.com/mobileharvest/topic/2644b00a418b44ff944eb117f3768eba/topic_url/1_1.png"></div>
+    <div class="topic" topic="7a84b8fcfd8d4909a1976e9eee077f19"><img class="topic_pic" src="http://s3-ap-southeast-1.amazonaws.com/mobileharvest/topic/7a84b8fcfd8d4909a1976e9eee077f19/topic_url/4_4.png"></div>
+    <div class="topic" topic="600df7913aac4b3c93cfcf460417de03"><img class="topic_pic" src="http://s3-ap-southeast-1.amazonaws.com/mobileharvest/topic/600df7913aac4b3c93cfcf460417de03/topic_url/3_3.png"></div>
+    <div class="topic" topic="5561ac1ec2c044a28e4f58421bf1e16d"><img class="topic_pic" src="http://s3-ap-southeast-1.amazonaws.com/mobileharvest/topic/5561ac1ec2c044a28e4f58421bf1e16d/topic_url/2_2.png"></div>
+    <div class="topic" topic="2644b00a418b44ff944eb117f3768eba"><img class="topic_pic" src="http://s3-ap-southeast-1.amazonaws.com/mobileharvest/topic/2644b00a418b44ff944eb117f3768eba/topic_url/1_1.png"></div>
   </div>
   
   <div id="organisations_column" style="width:32%; height: 100%; display: inline-block; vertical-align: top;">
@@ -121,6 +121,20 @@ usersCollection.query(query_user_by_username,{
 			window.location=link;
 		}); 
  }
+ 
+ $(".org").click(function(e){
+		e.preventDefault();
+		link = "orgMedia.html?"+"type="+$(this).attr('class')+"&org="+$(this).attr('org');
+		//alert(link);
+		window.location=link;
+	}); 
+ 
+ $(".org").click(function(e){
+		e.preventDefault();
+		link = "topicMedia.html?"+"type="+$(this).attr('class')+"&topic="+$(this).attr('topic');
+		//alert(link);
+		window.location=link;
+	}); 
 </script>  
 
 <script>

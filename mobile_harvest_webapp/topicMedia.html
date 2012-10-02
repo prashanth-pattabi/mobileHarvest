@@ -49,12 +49,23 @@ var TopicsCollection = StackMob.Collection.extend({
 		model: Media
 	});
 	
+//Define the Tagged Topic Class
+	var TaggedTopic = StackMob.Model.extend({
+		schemaName: 'topic_tags'
+	});            
+	
+	//Define the Tagged Topic Collection
+	var TaggedTopicCollection = StackMob.Collection.extend({
+		model: TaggedTopic
+	});
+	
 var mediaCollection = new MediaCollection();   
-var topicsCollection = new TopicsCollection();   
+var topicsCollection = new TopicsCollection();
+var taggedTopicCollection = new TaggedTopicCollection();
 
 var query_profile_picture_by_topic = new StackMob.Collection.Query();
-var query_media_by_topic = new StackMob.Collection.Query();
-
+var query_media_by_media_id = new StackMob.Collection.Query();
+var query_topic_tags_for_media_with_specific_topic_tag = new StackMob.Collection.Query();
 
 function gup(name)
 {
@@ -84,17 +95,34 @@ topicsCollection.query(query_profile_picture_by_topic,{
 }
 
 function fetchTopicMedia(topic){
-  query_media_by_topic.setExpand(2).mustBeOneOf('media_topictags', 'b4e8a170ab8b4a388c593e1b8d14555f').setRange(0,5).orderDesc('createddate');
-  mediaCollection.query(query_media_by_topic,{
-	  success: function(parsedCollection){
-		  $("#output_box").html(JSON.stringify(parsedCollection));
-		  var parsedCollection = parsedCollection.toJSON();
-		  for(var i=0; i<parsedCollection.length; i++){
-			  $("#media_collection_of_topic:last").append('<a href='+parsedCollection[i].audio+' target="_blank">');
-			  $("#media_collection_of_topic a:last").append('<div class="mediaFileRow" media_link='+parsedCollection[i].audio+'>'+i+'</div>');
-		  }
-		 }
-	 });
+	query_topic_tags_for_media_with_specific_topic_tag.select('media_id').equals('tagged_topic',topic);
+	taggedTopicCollection.query(query_topic_tags_for_media_with_specific_topic_tag,{
+		success: function(parsedCollection){
+			parsedCollection = parsedCollection.toJSON();
+			//$("#output_box").html(JSON.stringify(parsedCollection));
+			var media_ids_list = new Array();
+			for(var i=0; i<parsedCollection.length; i++){
+				media_ids_list.push(parsedCollection[i].media_id);
+				getMediaFiles(media_ids_list);
+			}
+			//$("#output_box").html(JSON.stringify(media_ids_list));
+			
+			function getMediaFiles(media_ids_list){
+				//alert(JSON.stringify(media_ids_list));
+				query_media_by_media_id.mustBeOneOf('media_id',media_ids_list).setRange(0,5).orderDesc('createddate');
+				mediaCollection.query(query_media_by_media_id,{
+				 success: function(parsedCollection){
+					$("#output_box").html(JSON.stringify(parsedCollection));
+				  var parsedCollection = parsedCollection.toJSON();
+				  for(var i=0; i<parsedCollection.length; i++){
+					  $("#media_collection_of_topic:last").append('<a href='+parsedCollection[i].audio+' target="_blank">');
+					  $("#media_collection_of_topic a:last").append('<div class="mediaFileRow" media_link='+parsedCollection[i].audio+'>'+i+'</div>');
+					 }
+				 }
+				});
+			}
+		}
+	});
  }
 </script>
 

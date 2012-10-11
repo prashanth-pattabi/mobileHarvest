@@ -4,13 +4,12 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Mobile Harvest Portal</title>
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
-
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 <script type="text/javascript" src="http://static.stackmob.com/js/json2-min.js"></script>
-<script type="text/javascript" src="http://static.stackmob.com/js/underscore-1.3.3-min.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/underscore-1.4.1-min.js"></script>
 <script type="text/javascript" src="http://static.stackmob.com/js/backbone-0.9.2-min.js"></script>
 <script type="text/javascript" src="http://static.stackmob.com/js/2.5.3-crypto-sha1-hmac.js"></script>
-<script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.5.5-min.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.6.0-min.js"></script>
 
 <script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
 <link type="text/css" rel="stylesheet" href="bootstrap/css/bootstrap.css"></link>
@@ -26,6 +25,7 @@ StackMob.init({
     publicKey: "763e6283-1507-4084-91bf-4b1ba61009bc",
     apiVersion: 0
 });
+
 
 </script>
 
@@ -62,46 +62,39 @@ StackMob.init({
     	  e.preventDefault();
     	  
     	  //or get the session expire time in milliseconds (corrected to your local client's time)
-    	    if ((new Date()).getTime() > StackMob.getOAuthExpireTime()) {
+    	  /*  if ((new Date()).getTime() > StackMob.getOAuthExpireTime()) {
     	        alert("We've passed the expire time!");
     	    }
+    	  */
     	  
     	  var username = $("#username").val();
     	  var password = $("#password").val();
 
     	  
     	  
-    		var user = new StackMob.User({username: 'johnsmith'});
+    		var user = new StackMob.User({username: username, password: password});
     		
-    		user.fetch({
-    			success:function(model){
-    				model = model.toJSON();
-    				alert(JSON.stringify(model));
-    				if(password == model.password){
-    					alert("Password matched");
-    				}
-    				else
-    					alert("password did not match");
-    			}
-    			
-    		});
+    		
     		
     		/* --------------------------------------------------
     		 *								LOGIN A USER
     		 * ---------------------------------------------------- */
-    		/*
+    		
     		//Makes a call to StackMob to request a login
     		user.login(false,{
     			success: function(model, response){
     		    //show a success message/update your UI
     		    alert("Login successful");
+    		    alert(StackMob.getLoggedInUser());
     		  }, 
     		  error: function(model, response) {
     		    //show a failure message in your app    
     		    alert("Login Failed "+ JSON.stringify(model));
     		  }
     		});
-    		*/
+    		
+    		 
+    		
     		
     		/* --------------------------------------------------
     		 *								CREATING A NEW USER

@@ -20,9 +20,11 @@
 
 StackMob.init({
     appName: "testfunc",
-    userSchema: 'portal_user',
     clientSubdomain: "prashanthpattabigmailcom",
     publicKey: "763e6283-1507-4084-91bf-4b1ba61009bc",
+    userSchema: 'portal_user',
+    loginField: 'username', //the username you are using as the login field
+    passwordField: 'password', //the password field you are using as the password field
     apiVersion: 0
 });
 
@@ -61,12 +63,6 @@ StackMob.init({
       $("#login_form_submit").click(function(e){
     	  e.preventDefault();
     	  
-    	  //or get the session expire time in milliseconds (corrected to your local client's time)
-    	  /*  if ((new Date()).getTime() > StackMob.getOAuthExpireTime()) {
-    	        alert("We've passed the expire time!");
-    	    }
-    	  */
-    	  
     	  var username = $("#username").val();
     	  var password = $("#password").val();
 
@@ -82,10 +78,23 @@ StackMob.init({
     		
     		//Makes a call to StackMob to request a login
     		user.login(false,{
-    			success: function(model, response){
+    			success: function(model){
     		    //show a success message/update your UI
     		    alert("Login successful");
-    		    alert(StackMob.getLoggedInUser());
+    		    //alert(JSON.stringify(model));
+    		    
+    		    if(typeof(Storage)!=="undefined"){
+             // Yes! localStorage and sessionStorage support!
+    		     sessionStorage.username = model.username;
+    		     sessionStorage.auth = "success";
+    		     //alert(sessionStorage.getItem('username'));
+    		     window.location = "test.html";
+            }
+          	else{
+             alert("Sorry! No web storage support..");
+            }
+    		    
+    		    
     		  }, 
     		  error: function(model, response) {
     		    //show a failure message in your app    

@@ -34,6 +34,8 @@ StackMob.init({
 </head>
 <body>
 
+
+
 <script>
 // Check for the various File API support.
 if (window.File && window.FileReader && window.FileList && window.Blob) {
@@ -65,7 +67,7 @@ if (window.File && window.FileReader && window.FileList && window.Blob) {
                 <a href="">SETTINGS</a>
               </li>
               <li class="">
-                <a href="">LOGOUT</a>
+                <a href="" onclick="logout()">LOGOUT</a>
               </li>
             </ul>
           </div>
@@ -92,6 +94,11 @@ if (window.File && window.FileReader && window.FileList && window.Blob) {
         </ul>
         
       <script>
+      
+      /*-----------------------------------------------
+			*								MEDIA SCHEMA
+			-------------------------------------------------*/
+		
       //Define the Media Class
   		var Media = StackMob.Model.extend({
   			schemaName: 'media'
@@ -104,12 +111,18 @@ if (window.File && window.FileReader && window.FileList && window.Blob) {
   		
   		var mediaCollection = new MediaCollection();   
   		
-  	 //Define the Media Class
+  		
+  		
+  		/*-----------------------------------------------
+  		*								TOPIC SCHEMA
+  		-------------------------------------------------*/
+  		
+  	 //Define the Topic Class
   		var Topic = StackMob.Model.extend({
   			schemaName: 'topic'
   		});            
   		
-  		//Define the Media Collection
+  		//Define the Topic Collection
   		var TopicCollection = StackMob.Collection.extend({
   			model: Topic
   		});
@@ -117,62 +130,50 @@ if (window.File && window.FileReader && window.FileList && window.Blob) {
   		var topicCollection = new TopicCollection();
   		
   		
+  		
+  		/*-----------------------------------------------
+  		*								USER SCHEMA
+  		-------------------------------------------------*/
+  		
+  	  //Define the Users Class
+  		var User = StackMob.Model.extend({
+  			schemaName: 'user'
+  		});            
+  		
+  		//Define the User Collection
+  		var UserCollection = StackMob.Collection.extend({
+  			model: User
+  		});
+  	 
+  		var userCollection = new UserCollection();
+  		
+  		
       </script>  
            
         <div class="tab-content">
           <div class="tab-pane active" id="tab1">
-          <div id="mediaByOrgWrapper"></div>
-          <script>
-           var query_media_by_org = new StackMob.Collection.Query();
-           query_media_by_org.equals('username', 'UNWomen').setRange(0,9).orderDesc('createddate');
-           mediaCollection.query(query_media_by_org,{
-  				  success: function(parsedCollection){
-  					  var parsedCollection = parsedCollection.toJSON();
-  					  $("#mediaByOrgWrapper").append('<table class="table table-striped">');
-  					  for(var i=0; i<parsedCollection.length; i++){
-          	$("#mediaByOrgWrapper table").append('<tr class="mediaFileRow" media_link='+parsedCollection[i].audio+'>');
-          	$("#mediaByOrgWrapper table tr:last").append('<td>'+parsedCollection[i].media_id+'</td>');
-          	$("#mediaByOrgWrapper table tr:last").append('<td>'+parsedCollection[i].username+'</td>');
-          }
-  					  $("#mediaByOrgWrapper").append('</table>');
-  						$("#mediaByOrgWrapper").append("<script type='text/javascript' src='http://mediaplayer.yahoo.com/js'>");
-  				  },
-  				  failure:function(){
-  					  alert("Query didn't execute properly");
-  				  }
-  			  }); //fetch the first 10 entries
-	
-           </script>
+            <div id="mediaByOrgWrapper"></div>
+            <script type="text/javascript" src="assets/js/loadUNWomenAudio.js"></script>
           </div>
           
           <!-- CONTENT FOR OTHER MEDIA SECTION -->
           <div class="tab-pane" id="tab2">
            <div id="podcastsWrapper"></div>
            <div class="tab2_nav" display:none>
-             <div id="prev" style="background-color: #000; color:#fff; display: inline-block; float: left">Prev</div>
-             <div id="next" style="background-color: #000; color:#fff; display: inline-block; float: left; margin-left:20px">Next</div>
+             <div class="pagination">
+              <ul>
+                <li><a id="prev">Prev</a></li>
+                <!-- 
+                <li><a href="#">1</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">4</a></li>
+                 -->
+                <li><a id="next">Next</a></li>
+              </ul>
+            </div>
            </div>
-            <script>
-							 var q = new StackMob.Collection.Query();
-							  q.setRange(0,9).orderDesc('createddate');
-							  mediaCollection.query(q,{
-								  success: function(parsedCollection){
-									  var parsedCollection = parsedCollection.toJSON();
-									  $("#podcastsWrapper").append('<table class="table table-striped">');
-									  for(var i=0; i<parsedCollection.length; i++){
-		                	$("#podcastsWrapper table").append('<tr class="mediaFileRow" media_link='+parsedCollection[i].audio+'>');
-		                	$("#podcastsWrapper table tr:last").append('<td>'+parsedCollection[i].media_id+'</td>');
-		                	$("#podcastsWrapper table tr:last").append('<td>'+parsedCollection[i].username+'</td>');
-		                	$("#podcastsWrapper table tr:last").append('<td>'+'<a href='+parsedCollection[i].audio+' target="_blank">Open</a>'+'</td>');
-		                }
-									  $("#podcastsWrapper").append('</table>');
-								  },
-								  failure:function(){
-									  alert("Query didn't execute properly");
-								  }
-							  }); //fetch the first 10 entries
-					
-            </script>
+           <script type="text/javascript" src="assets/js/loadAllAudio.js"></script>
           </div>
           
           
@@ -281,9 +282,14 @@ if (window.File && window.FileReader && window.FileList && window.Blob) {
     	  $("#picUploaderForm").slideDown();
       });
       
+      function logout(){
+    	  alert("logout clicked");
+    	  var user = new StackMob.User({username: StackMob.getLoggedInUser()});
+    	  //alert(JSON.stringify(user));
+    	  //user.logout();
+    	  window.location = "login.html";
+      }
 
-
-      
     </script>
     
     

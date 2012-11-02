@@ -9,7 +9,7 @@
 <script type="text/javascript" src="http://static.stackmob.com/js/underscore-1.4.1-min.js"></script>
 <script type="text/javascript" src="http://static.stackmob.com/js/backbone-0.9.2-min.js"></script>
 <script type="text/javascript" src="http://static.stackmob.com/js/2.5.3-crypto-sha1-hmac.js"></script>
-<script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.6.0-min.js"></script>
+<script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.6.1-beta-bundled-min.js"></script>
 
 <script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
 <link type="text/css" rel="stylesheet" href="bootstrap/css/bootstrap.css"></link>
@@ -19,9 +19,9 @@
 <script type="text/javascript">
 
 StackMob.init({
-    appName: "testfunc",
-    clientSubdomain: "prashanthpattabigmailcom",
-    publicKey: "763e6283-1507-4084-91bf-4b1ba61009bc",
+    appName: "mobile_harvest",
+    clientSubdomain: "psaisravangmailcom",
+    publicKey: "98037dd3-3517-45cf-8cd0-095b63015c0c",
     userSchema: 'portal_user',
     loginField: 'username', //the username you are using as the login field
     passwordField: 'password', //the password field you are using as the password field
@@ -81,18 +81,19 @@ StackMob.init({
     			success: function(model){
     		    //show a success message/update your UI
     		    alert("Login successful");
+    		    window.location="index.html"
     		    //alert(JSON.stringify(model));
-    		    
+    		    /* 
+    		    ----------------- SESSION STORAGE ------------------- 
     		    if(typeof(Storage)!=="undefined"){
-             // Yes! localStorage and sessionStorage support!
     		     sessionStorage.username = model.username;
     		     sessionStorage.auth = "success";
-    		     alert(sessionStorage.getItem('username'));
-    		     window.location = "test.html";
             }
           	else{
              alert("Sorry! No web storage support..");
             }
+    		    -----------------------------------------------------
+    		    */
     		    
     		    
     		  }, 
@@ -101,6 +102,9 @@ StackMob.init({
     		    alert("Login Failed "+ JSON.stringify(model));
     		  }
     		});
+    		
+    		
+    		//alert(user.isLoggedIn());
     		
     		 
     		
@@ -120,12 +124,9 @@ StackMob.init({
     		});
     		
     		*/
-    		
-    		
-    		
-    		
-    		
       });
+      
+      
     </script>
   </div>
   

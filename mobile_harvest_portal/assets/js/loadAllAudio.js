@@ -53,7 +53,7 @@ mediaCollection.query(fetch_media_in_range,{
   $("#podcastsWrapper").append('<table class="table table-striped">');
   for(var i=0; i<parsedCollection.length; i++){
 	  $("#podcastsWrapper table").append('<tr class="mediaFileRow" media_link='+parsedCollection[i].audio+'>');
-	  $("#podcastsWrapper table tr:last").append('<td class="profile_pic"><img src="assets/img/empty_profile_picture.gif" width="30px" /></td>');
+	  $("#podcastsWrapper table tr:last").append('<td class="profile_pic"><img src="assets/img/empty_profile_picture.gif" width="40px" /></td>');
 	  $("#podcastsWrapper table tr:last").append('<td class="username">'+parsedCollection[i].username+'</td>');
 	  $("#podcastsWrapper table tr:last").append('<td>'+parsedCollection[i].media_id+'</td>');
 	  $("#podcastsWrapper table tr:last").append('<td>'+'<a href='+parsedCollection[i].audio+' target="_blank">Open</a>'+'</td>');
@@ -88,7 +88,7 @@ mediaCollection.query(fetch_media_in_range,{
 			console.log("Success: "+JSON.stringify(temp[0].username));
 			var img_src = temp[0].profile_picture; 
 			if(img_src != null && img_src !=""){
-			  profile_pic_dom_holder.html("<img src="+img_src+" width='30px'/>");
+			  profile_pic_dom_holder.html("<img src="+img_src+" width='40px'/>");
 			}
 			return;
 		 }
